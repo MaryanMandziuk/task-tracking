@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block dialog %}
+    <dialog class="mdl-dialog" style="z-index: 2;">
+        <form action="{% url 'task:edit_task' task.pk %}" method="post">
+            {% csrf_token %}
+          <div class="mdl-dialog__content">
+              <div class="mdl-textfield mdl-js-textfield">
+                <input class="mdl-textfield__input" type="text" id="name" name="name" value="{{ task.name }}">
+                <label class="mdl-textfield__label" for="name">Name</label>
+              </div>
+          </div>
+          <div class="mdl-textfield mdl-js-textfield">
+                <textarea class="mdl-textfield__input" type="text" rows="3" maxrows="6"
+                 id="description" name="description">{{ task.description }}</textarea>
+                <label class="mdl-textfield__label" for="description">Description</label>
+          </div>
+          <div class="mdl-dialog__actions " style="display: flex;
+          flex-direction: row;
+           align-items: center;
+          justify-content: space-between;">
+
+            <a href="/"><button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent close" style="float: left;">Cancel</button></a>
+            <button  type="submit"  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="float: left;">Save</button>
+          </div>
+      </form>
+    </dialog>
+
+    <script>
+      var dialog = document.querySelector('dialog');
+      var showModalButton = document.querySelector('.show-modal');
+      if (! dialog.showModal) {
+        dialogPolyfill.registerDialog(dialog);
+      }
+
+      dialog.showModal();
+      dialog.querySelector('.close').addEventListener('click', function() {
+        dialog.close();
+      });
+    </script>
+{% endblock %}

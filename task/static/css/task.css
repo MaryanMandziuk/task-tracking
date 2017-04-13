@@ -1,0 +1,104 @@
+html, body {
+  font-family: 'Roboto', 'Helvetica', sans-serif;
+}
+
+.tasks-layout .mdl-layout__header {
+  color: rgba(0, 0, 0, 0.54);
+}
+.mdl-layout__drawer {
+  margin-bottom: 16px;
+}
+
+.tasks-navigation {
+  z-index: -2;
+}
+/* END iOS Safari specific workaround */
+.mdl-menu .mdl-menu__item {
+  display: flex;
+  align-items: center;
+}
+.tasks-drawer-header {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
+  height: 151px;
+}
+
+.tasks-navigation {
+  flex-grow: 1;
+}
+.tasks-layout .tasks-navigation .mdl-navigation__link {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.56);
+  font-weight: 500;
+}
+.tasks-layout .tasks-navigation .mdl-navigation__link:hover {
+  background-color: #00BCD4;
+  color: #37474F;
+}
+.tasks-navigation .mdl-navigation__link .material-icons {
+  font-size: 24px;
+  color: rgba(255, 255, 255, 0.56);
+  margin-right: 32px;
+}
+
+
+.mdl-card__title {
+  color: black;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+
+.mdl-card__actions a {
+  color: #00BCD4;
+  text-decoration: none;
+}
+
+.mdl-card__actions {
+  /*height: 64px;
+  display: flex;
+  box-sizing: border-box;
+  align-items: center;*/
+}
+
+.tasks {
+    margin: 16px 16px 16px 16px;
+    padding: 20px 20px 20px 20px;
+    height: 90%;
+    overflow-y: auto;
+}
+
+.mdl-dialog__actions {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.created-finished {
+    font-size: small;
+    margin-right: 5px;
+    z-index: 1;
+}
+.link-button {
+    font-weight: normal;
+    text-decoration: none;
+}
+
+.card-action-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+#add-task-button {
+    top: 80px;
+    right: 20px;
+    position: fixed;
+    z-index: 2;
+}
