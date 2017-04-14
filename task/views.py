@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views import generic
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.urls import reverse
-
+from datetime import timedelta
 from .models import Task
 
 
@@ -11,7 +11,22 @@ class TaskView(generic.ListView):
     context_object_name = "tasks"
 
     def get_queryset(self):
-        return Task.objects.order_by("created")[:9]
+        # return Task.objects.order_by("created")[:9]
+
+
+        filter = self.kwargs['filter']
+        if filter == None or filter == "creating":
+            return Task.objects.order_by("-created")[:9]
+
+        elif filter == "spend":
+            return Task.objects.order_by("-timer")[:9]
+
+        elif filter == "name":
+            return Task.objects.order_by("name")[:9]
+
+        elif filter == "done":
+            return Task.objects.filter(done=True)
+
 
 
 
@@ -55,5 +70,27 @@ def is_done(request):
     task.save()
     data = {
         'done': done,
+    }
+    return JsonResponse(data)
+
+
+def timer(request):
+    id = request.GET.get('id', None)
+    task = Task.objects.get(pk=id)
+    timer = request.GET.get('timer', 0)
+
+    task.timer = timedelta(seconds=int(timer))
+    task.save()
+    data = {
+        'done': "done",
+    }
+    return JsonResponse(data)
+
+
+def timer_value(request):
+    id = request.GET.get('id', None)
+    task = Task.objects.get(pk=id)
+    data = {
+        'timer': task.timer.total_seconds(),
     }
     return JsonResponse(data)
