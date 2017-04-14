@@ -1,3 +1,4 @@
+
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
@@ -5,9 +6,7 @@ html, body {
 .tasks-layout .mdl-layout__header {
   color: rgba(0, 0, 0, 0.54);
 }
-.mdl-layout__drawer {
-  margin-bottom: 16px;
-}
+
 
 .tasks-navigation {
   z-index: -2;

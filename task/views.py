@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views import generic
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.urls import reverse
 
 from .models import Task
@@ -41,3 +41,19 @@ def edit_task(request, pk):
         task.save()
         return HttpResponseRedirect("/")
     return render(request, "task/edit_task.html", {'task':task, 'tasks':tasks})
+
+
+def is_done(request):
+    id = request.GET.get('id', None)
+    task = Task.objects.get(pk=id)
+
+    done = request.GET.get('done', False)
+    if done == "1":
+        task.done = True
+    else:
+        task.done = False
+    task.save()
+    data = {
+        'done': done,
+    }
+    return JsonResponse(data)
