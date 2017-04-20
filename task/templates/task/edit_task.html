@@ -6,13 +6,13 @@
             {% csrf_token %}
           <div class="mdl-dialog__content">
               <div class="mdl-textfield mdl-js-textfield">
-                <input class="mdl-textfield__input" type="text" id="name" name="name" value="{{ task.name }}">
+                <input maxlength="25" class="mdl-textfield__input" type="text" id="name" name="name" value="{{ task.name }}">
                 <label class="mdl-textfield__label" for="name">Name</label>
               </div>
           </div>
           <div class="mdl-textfield mdl-js-textfield">
                 <textarea class="mdl-textfield__input" type="text" rows="3" maxrows="6"
-                 id="description" name="description">{{ task.description }}</textarea>
+                 id="description" maxlength="200" name="description">{{ task.description }}</textarea>
                 <label class="mdl-textfield__label" for="description">Description</label>
           </div>
           <div class="mdl-dialog__actions " style="display: flex;
@@ -20,7 +20,7 @@
            align-items: center;
           justify-content: space-between;">
 
-            <a href="/"><button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent close" style="float: left;">Cancel</button></a>
+            <a href="{% url "task:task" %}"><button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent close" style="float: left;">Cancel</button></a>
             <button  type="submit"  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="float: left;">Save</button>
           </div>
       </form>

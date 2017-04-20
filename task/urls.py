@@ -12,4 +12,5 @@ urlpatterns = [
     url(r'^is_done/$', views.is_done, name="is_done"),
     url(r'^timer/$', views.timer, name="timer"),
     url(r'^timer_value/$', views.timer_value, name="timer_value"),
+    url(r'^pagination_ajax/$', views.pagination_ajax, name='pagination_ajax'),
 ]

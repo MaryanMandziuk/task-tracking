@@ -1,0 +1,31 @@
+{% extends "base_account.html" %}
+
+{% block content %}
+
+{% if validlink %}
+    <p style="white-text">Please enter your new password twice:</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mdl-textfield mdl-js-textfield">
+            {{ form.new_password1 }}
+            <label class="mdl-textfield__label" style="color: white;" for="new_password1">New password</label>
+            <span class="mdl-textfield__error">{{ form.error }}</span>
+        </div>
+        <br>
+        <div class="mdl-textfield mdl-js-textfield">
+            {{ form.new_password2 }}
+            <label class="mdl-textfield__label" style="color: white;" for="new_password2">New password confirmation</label>
+            <span class="mdl-textfield__error">{{ form.error }}</span>
+        </div>
+        <br>
+        <button type="submit" class="login-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">RESET</button>
+    </form>
+
+{% else %}
+    <p style="white-text">The password reset link was invalid, possibly because it has already been used.
+        Rquest a new password reset.</p>
+{% endif %}
+    <div class="help">
+        <a href="{% url "account:login" %}">Login</a>
+    </div>
+{% endblock %}

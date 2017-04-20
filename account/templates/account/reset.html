@@ -1,0 +1,18 @@
+{% extends 'base_account.html' %}
+
+{% block content %}
+    <form  method="post">
+        {% csrf_token %}
+        <div class="mdl-textfield mdl-js-textfield">
+            <!-- <input class="mdl-textfield__input" type="email" style="color: white;" id="email" /> -->
+            {{ form.email }}
+            <label class="mdl-textfield__label" style="color: white;" for="email">Email</label>
+        </div>
+        <br>
+        <button type="submit" class="login-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">RESET</button>
+    </form>
+
+    <div class="help">
+        <a href="{% url 'account:login' %}">Back to login</a>
+    </div>
+{% endblock %}

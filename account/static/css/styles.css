@@ -1,0 +1,104 @@
+@media (min-width: 300px) {
+    .time h1 { font-size: 200%; }
+    .time h6 { font-size: 90%; }
+}
+
+@media (min-width: 500px) {
+    .time h1 { font-size: 250%; }
+}
+
+@media (min-width: 700px) {
+    .time h1 { font-size: 300%; }
+}
+
+@media (min-width: 1200px) {
+    .time h1 { font-size: 500%; }
+}
+
+.mdl-textfield__input {
+	border-bottom: 1px solid white;
+}
+
+html {
+  background: url('../images/2.jpg') no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+.time {
+    position: relative;
+    /*margin-bottom: 150px;*/
+    color: white;
+    /*font-size: xx-large;*/
+    /*margin: auto;*/
+    padding: 10px 10px 10px 10px;
+    /*width: 50%;*/
+}
+
+.time h1 {
+    font-family: "Courier New", Courier, "Lucida Sans Typewriter", "Lucida Typewriter", monospace;
+}
+.login-layout {
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+}
+.mdl-layout {
+    /*align-items: center;
+    justify-content: center;
+    position: absolute;*/
+
+    /*display: flex;*/
+}
+.login-conten-layout {
+    flex: none;
+}
+.mdl-layout__content {
+	/*padding: 24px;*/
+
+	/*flex: none;*/
+
+}
+
+
+.mdl-textfield__input {
+    color: white;
+
+}
+
+.mdl-textfield {
+    color: white;
+}
+
+.login-button {
+    width: 100%;
+}
+
+
+.help {
+    margin: 10px 10px 10px 10px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.help a {
+    color: white;
+    font-weight: 600;
+}
+
+.help a:hover {
+    color: black;
+}
+
+.footer {
+    /*background-color: #FFF;*/
+    bottom: 0px;
+    position:fixed;
+    color: black;
+}
+
+.white-text {
+    color: white;
+}

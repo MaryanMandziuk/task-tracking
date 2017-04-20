@@ -1,0 +1,36 @@
+{% extends 'base_account.html' %}
+
+{% block content %}
+{% if error %}
+<span style="color: red;">{{ error }}</span>
+{% endif %}
+    <form action="{% url 'account:login' %}" method='post'>
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div class="mdl-textfield mdl-js-textfield">
+            <!-- <input class="mdl-textfield__input" type="email" style="color: white;" id="email" required/> -->
+
+            {{ field }}
+            <label class="mdl-textfield__label" style="color: white;" for="email">{{ field.label }}</label>
+            <!-- <span class="mdl-textfield__error">icorrect email</span> -->
+            <span class="mdl-textfield__error">{{ field.error }}</span>
+        </div>
+
+        <br>
+        {% endfor %}
+        <!-- <div class="mdl-textfield mdl-js-textfield">
+            <input class="mdl-textfield__input" type="password" style="color: white;" id="password" />
+            <label class="mdl-textfield__label" style="color: white;" for="password">Password</label>
+        </div> -->
+        <br>
+        <button type='submit' class="login-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">LOG IN</button>
+    </form>
+
+    <div class="help">
+        <a href="{% url 'account:reset' %}">Forgot your password?</a>
+    </div>
+    <div class="help">
+        Don't have account? <a href="{% url 'account:register' %}">SIGN IN</a>
+    </div>
+{% endblock %}

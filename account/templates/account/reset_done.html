@@ -1,0 +1,12 @@
+{% extends "base_account.html" %}
+
+{% block content %}
+    <div class="white-text">
+    <h4>Reset your password</h4>
+    <p>We've emailed you instructions for setting your password.</p>
+    <p>If you don't receive an email, make sure you're entered the address you registerd with.</p>
+    </div>
+    <div class="help">
+        <a href="{% url 'account:login' %}">Back to login</a>
+    </div>
+{% endblock %}

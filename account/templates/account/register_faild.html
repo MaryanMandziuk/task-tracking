@@ -1,0 +1,10 @@
+{% extends "base_account.html" %}
+
+{% block content %}
+
+    <div class="white-text help">
+        <p>User with email: {{ email }} has been registered.</p>
+             <a href="{% url "account:register" %}">You can sign in with another email.</a><br>
+             <a href="{% url "account:login" %}">Login</a>
+     </div>
+{% endblock %}
