@@ -6,15 +6,22 @@ from datetime import timedelta
 from .models import Task
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from .forms import MaterialSearchForm
+from haystack.views import SearchView
 import json
 
 item_by_paginate = 9
+
+class TaskSearchView(SearchView):
+    def extra_context(self):
+        return {'results': self.results}
 
 
 class TaskView(generic.ListView):
     template_name = "task/task.html"
     context_object_name = "tasks"
     paginate_by = item_by_paginate
+    # form_class = MaterialSearchForm
 
     def get_queryset(self):
         filter = self.kwargs['filter']
@@ -39,7 +46,11 @@ class TaskView(generic.ListView):
     def dispatch(self, request, *args, **kwargs):
         return super(TaskView, self).dispatch(request, *args, **kwargs)
 
-
+    # def get_context_data(self, **kwargs):
+    #     context = super(TaskView, self).get_context_data(**kwargs)
+    #     context['form'] = MaterialSearchForm()
+    #     # And so on for more models
+    #     return context
 
 @login_required
 def create_task(request):
@@ -80,6 +91,7 @@ def is_done(request):
     task = Task.objects.filter(user=request.user).get(pk=id)
 
     done = request.GET.get('done', False)
+    print(done)
     if done == "1":
         task.done = True
     else:
