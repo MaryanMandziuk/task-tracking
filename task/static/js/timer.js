@@ -17,7 +17,6 @@ function timer(time, id)
 
             window.onbeforeunload = function(event)
             {
-            //    return confirm("Confirm refresh");
                send_timer(time, id);
             };
     }
@@ -33,7 +32,6 @@ function timer(time, id)
         window.onbeforeunload = function(event)
         {
             send_timer(time, id);
-        //    return confirm("Confirm refresh");
         };
     }
 }
@@ -111,18 +109,4 @@ function get_timer(id) {
       }
     });
     return timer;
-}
-
-$(document).ready(function() {
-    timers_refresh();
-})
-
-function timers_refresh() {
-    $(".timer").each(function() {
-        var id = $(this).attr("id");
-        var pos = id.lastIndexOf("-");
-        id = id.slice(pos+1);
-        var time = get_timer(id);
-        generate_time(time, id);
-    });
 }

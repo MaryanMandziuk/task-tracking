@@ -1,7 +1,6 @@
 from django.db import models
 from datetime import timedelta
 from django.contrib.auth.models import User
-from django.conf import settings
 
 
 class Task(models.Model):
@@ -17,4 +16,4 @@ class Task(models.Model):
         return self.name
 
     class Meta:
-           ordering = ['created', 'name']
+        ordering = ['created', 'name']

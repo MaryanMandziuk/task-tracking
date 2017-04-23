@@ -17,14 +17,13 @@ function pagination_ajax() {
                  var menu_list = create_menu(data[i]);
                  $('#card-title-'+data[i].pk).append(menu_button);
                  $('#card-title-'+data[i].pk).append(menu_list);
-
                  componentHandler.upgradeElement(menu_button, "MaterialButton");
                  componentHandler.upgradeElement(menu_list, 'MaterialMenu');
+                 generate_time(data[i].timer, data[i].pk);
              }
              offset += paginate_by
          }
 
-         timers_refresh();
 
         },
     error: function(err) {
@@ -48,6 +47,9 @@ function get_filter() {
     var path = window.location.pathname;
     var pos = path.lastIndexOf("/");
     var filter = path.slice(pos+1);
+    if(filter == "") {
+        filter = "creating";
+    }
     return filter;
 }
 
@@ -109,7 +111,7 @@ function generate_task(task) {
     var timer_button = document.createElement('button');
     timer_button.className = "mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--mini-fab mdl-button--colored";
     timer_button.onclick = function() {timing(this);};
-    if (task.done=="True") {
+    if (task.done == "True") {
         timer_button.disabled = true;
     }
     var timer_icon = document.createElement('i');
@@ -124,25 +126,10 @@ function generate_task(task) {
     card_title.appendChild(spacer);
     div_dates.appendChild(created);
 
-    if(task.finished != ""){
+    if(task.done == "True"){
         div_dates.appendChild(finished);
     }
     card_title.appendChild(div_dates);
-
-
-
-
-
-    // card_title.appendChild(menu_button);
-    // menu_link_edit.appendChild(menu_edit);
-    // menu_link_remove.appendChild(menu_remove);
-
-
-    // card_title.appendChild(menu_list);
-
-
-
-
 
     card_div.appendChild(card_title);
     card_div.appendChild(card_description);
@@ -187,14 +174,22 @@ function create_menu(task) {
     menu_list.id = "menu_list-" + task.pk;
     var menu_link_edit = document.createElement('a');
     menu_link_edit.className = "link-button";
-    menu_link_edit.href = "edit/"+task.pk;
+    if(task.filter == "") {
+        menu_link_edit.href = "edit/" + task.pk;
+    } else {
+        menu_link_edit.href = task.filter + "/edit/" + task.pk;
+    }
     var menu_edit = document.createElement('li');
     menu_edit.className = "mdl-menu__item";
     menu_edit.id = "edit" + task.pk;
     menu_edit.textContent = "Edit";
     var menu_link_remove = document.createElement('a');
     menu_link_remove.className = "link-button";
-    menu_link_remove.href = "remove/" + task.pk;
+    if(task.filter == "") {
+        menu_link_remove.href ="remove/" + task.pk;
+    } else {
+        menu_link_remove.href = task.filter + "/remove/" + task.pk;
+    }
     var menu_remove = document.createElement('li');
     menu_remove.className = "mdl-menu__item";
     menu_remove.textContent = "Remove";

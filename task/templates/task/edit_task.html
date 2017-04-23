@@ -2,7 +2,7 @@
 
 {% block dialog %}
     <dialog class="mdl-dialog" style="z-index: 2;">
-        <form action="{% url 'task:edit_task' task.pk %}" method="post">
+        <form action="{% url 'task:edit_task' pk=task.pk filter=filter %}" method="post">
             {% csrf_token %}
           <div class="mdl-dialog__content">
               <div class="mdl-textfield mdl-js-textfield">
@@ -20,7 +20,7 @@
            align-items: center;
           justify-content: space-between;">
 
-            <a href="{% url "task:task" %}"><button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent close" style="float: left;">Cancel</button></a>
+            <a href="{% url "task:task" filter=filter %}"><button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent close" style="float: left;">Cancel</button></a>
             <button  type="submit"  class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" style="float: left;">Save</button>
           </div>
       </form>

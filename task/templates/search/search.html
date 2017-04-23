@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block content %}
+{% block search_content %}
 
 {% if query %}
     {% for task in results %}
@@ -17,10 +17,10 @@
               <i class="material-icons">more_vert</i>
             </button>
             <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="{{ task.object.pk }}">
-              <a href="{% url 'task:edit_task' task.object.pk %}" class="link-button">
+              <a href="{% url 'task:edit_task' pk=task.object.pk filter=filter %}" class="link-button">
                   <li class="mdl-menu__item" id="edit{{ task.object.pk }}">Edit</li>
               </a>
-              <a href="{% url 'task:remove_task' task.object.pk %}" class="link-button">
+              <a href="{% url 'task:remove_task' pk=task.object.pk  filter=filter %}" class="link-button">
                   <li class="mdl-menu__item">Remove</li>
               </a>
             </ul>
@@ -60,12 +60,12 @@
     </div>
     {% endfor %}
 
-<script>
-// timers_refresh();
-</script>
+    <script type="text/javascript">
+    {% for task in results %}
+        generate_time({{ task.object.timer.total_seconds }}, {{ task.object.pk }});
+    {% endfor %}
+    </script>
 
-{% else %}
-    {# Show some example queries to run, maybe query syntax, something else? #}
 {% endif %}
 
 {% endblock %}
