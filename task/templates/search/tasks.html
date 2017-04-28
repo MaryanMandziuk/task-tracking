@@ -1,0 +1,65 @@
+{% for task in results %}
+<div class="mdl-cell mdl-card mdl-shadow--6dp">
+    <div  class="mdl-card__title mdl-color--indigo-300">
+        <h2 class="mdl-card__title-text">{{ task.object.name }}</h2>
+        <div class="mdl-layout-spacer"></div>
+        <div>
+            <div class="mdl-color-text--blue-grey-50 created-finished">created: {{ task.object.created }}</div>
+            {% if task.object.done %}
+            <div class="mdl-color-text--blue-grey-50 created-finished">finished: {{ task.object.finished }}</div>
+            {% endif %}
+        </div>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="{{ task.object.pk }}">
+          <i class="material-icons">more_vert</i>
+        </button>
+        <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="{{ task.object.pk }}">
+          <a href="{% url 'task:edit_search' pk=task.object.pk query=query %}" class="link-button">
+              <li class="mdl-menu__item" id="edit{{ task.object.pk }}">Edit</li>
+          </a>
+          <a href="{% url 'task:remove_search' pk=task.object.pk query=query %}" class="link-button">
+              <li class="mdl-menu__item">Remove</li>
+          </a>
+        </ul>
+    </div>
+    <div class="mdl-card__supporting-text">
+        {{ task.object.description }}
+    </div>
+    <div class="mdl-card__actions mdl-card--border">
+        <div class="card-action-container">
+            <div>
+                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-{{ task.object.pk }}">
+                    {% if task.object.done %}
+                    <input onclick="is_done(this);" type="checkbox" id="checkbox-{{ task.object.pk }}" class="mdl-checkbox__input" checked>
+                    {% else %}
+                    <input onclick="is_done(this);" type="checkbox" id="checkbox-{{ task.object.pk }}" class="mdl-checkbox__input" >
+                    {% endif %}
+                  <span class="mdl-checkbox__label">Done</span>
+                </label>
+            </div>
+
+            <div class="timer" id="timer-{{ task.object.pk }}"><span class="hour">00</span>:<span class="minute">00</span>:<span class="second">00</span></div>
+            <div id="button-timer-{{ task.object.pk }}">
+                {% if task.object.done %}
+                <button  onClick="timing(this);" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--mini-fab mdl-button--colored" disabled>
+                  <i class="material-icons">play_arrow</i>
+                </button>
+                {% else %}
+                <button  onClick="timing(this);" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--mini-fab mdl-button--colored">
+                  <i class="material-icons">play_arrow</i>
+                </button>
+                {% endif %}
+            </div>
+
+
+        </div>
+    </div>
+</div>
+{% empty %}
+<h4>There are no results!</h4>
+{% endfor %}
+
+<script type="text/javascript">
+{% for task in results %}
+    generate_time({{ task.object.timer.total_seconds }}, {{ task.object.pk }});
+{% endfor %}
+</script>

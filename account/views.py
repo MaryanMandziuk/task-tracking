@@ -1,5 +1,4 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 from django.contrib.auth import authenticate, login
 from .forms import MaterialLoginForm, UserRegistrationForm
 from django.shortcuts import redirect
@@ -13,12 +12,14 @@ def register(request):
         if form.is_valid():
             new_user = form.save(commit=False)
             email = form.cleaned_data['email']
-            if User.objects.filter(email = email).exists():
-                return render(request, 'account/register_faild.html', {'email':email})
+            if User.objects.filter(email=email).exists():
+                return render(request, 'account/register_faild.html', {
+                              'email': email})
             new_user.username = form.cleaned_data['email']
             new_user.set_password(form.cleaned_data['password1'])
             new_user.save()
-            return render(request, 'account/register_done.html', {'new_user': new_user})
+            return render(request, 'account/register_done.html', {
+                                    'new_user': new_user})
     else:
         print("FFFFF")
         form = UserRegistrationForm()
@@ -39,9 +40,9 @@ def user_login(request):
             else:
                 error = 'Invalid login'
                 return render(request,
-                    'account/login.html',
-                     {'form':form, 'error': error})
+                              'account/login.html',
+                              {'form': form, 'error': error})
 
     else:
         form = MaterialLoginForm()
-    return render(request, 'account/login.html', {'form':form})
+    return render(request, 'account/login.html', {'form': form})

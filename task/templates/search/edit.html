@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
-
 {% block content %}
-    {% include 'task/tasks.html' %}
+
+    {% include "search/tasks.html" %}
+
 {% endblock %}
 
+
 {% block dialog %}
-    <dialog id="edit_dialog" class="mdl-dialog">
-        <form action="{% url 'task:edit_task' pk=task.pk filter=filter %}" method="post">
+    <dialog id="edit_dialog" class="mdl-dialog" style="z-index: 3;">
+        <form action="{% url 'task:edit_search' pk=task.pk query=query %}" method="post">
             {% csrf_token %}
           <div class="mdl-dialog__content">
               <div class="mdl-textfield mdl-js-textfield">
@@ -19,10 +21,10 @@
                  id="description" maxlength="200" name="description">{{ task.description }}</textarea>
                 <label class="mdl-textfield__label" for="description">Description</label>
           </div>
-          <div class="align-dialog-buttons mdl-dialog__actions">
+          <div class="align-dialog-buttons mdl-dialog__actions ">
 
-            <a href="{% url "task:task" filter=filter %}"><button type="button" class="calncel-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent close">Cancel</button></a>
-            <button  type="submit"  class="save-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Save</button>
+            <button type="button" class="cancel-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent close">Cancel</button>
+            <button type="submit"  class="save-button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">Save</button>
           </div>
       </form>
     </dialog>

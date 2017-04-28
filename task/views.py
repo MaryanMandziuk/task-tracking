@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import generic
 from django.http import JsonResponse, HttpResponse, \
                         HttpResponseBadRequest, Http404
@@ -6,19 +6,15 @@ from datetime import timedelta
 from .models import Task
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
-from haystack.views import SearchView
+from haystack.query import SearchQuerySet
+from .utils import calculate_end, filter_args, check_filter
 import json
 
 ITEM_BY_PAGINATION = 9
 
 
-class TaskSearchView(SearchView):
-    def extra_context(self):
-        return {'results': self.results, 'filter': "creating"}
-
-
 class TaskView(generic.ListView):
-    template_name = "base.html"
+    template_name = "task/task.html"
     context_object_name = "tasks"
     paginate_by = ITEM_BY_PAGINATION
 
@@ -26,6 +22,9 @@ class TaskView(generic.ListView):
         filter = self.kwargs['filter']
         if not check_filter(filter):
             raise Http404
+        if filter == "done":
+            return Task.objects.filter(user=self.request.user, done=True)\
+                .order_by(*filter_args(filter))[:ITEM_BY_PAGINATION]
         return Task.objects.filter(user=self.request.user)\
             .order_by(*filter_args(filter))[:ITEM_BY_PAGINATION]
 
@@ -48,20 +47,22 @@ def create_task(request, filter):
     description = request.POST.get('description', None)
     task = Task(user=request.user, name=name, description=description)
     task.save()
-    print(filter, "create_task")
     return redirect("task:task", filter=filter)
 
 
 @login_required
 def remove_task(request, pk, filter):
-    task = Task.objects.get(user=request.user, pk=pk)
+    task = get_object_or_404(Task, user=request.user, pk=pk)
     task.delete()
     return redirect("task:task", filter=filter)
 
 
 @login_required
 def edit_task(request, pk, filter):
-    task = Task.objects.get(user=request.user, pk=pk)
+    task = get_object_or_404(Task, user=request.user, pk=pk)
+    if filter == "done":
+        tasks = Task.objects.filter(user=request.user, done=True)\
+            .order_by(*filter_args(filter))[:ITEM_BY_PAGINATION]
     tasks = Task.objects.filter(user=request.user) \
         .order_by(*filter_args(filter))[:ITEM_BY_PAGINATION]
     if request.method == 'POST':
@@ -71,6 +72,7 @@ def edit_task(request, pk, filter):
         task.description = description
         task.save()
         return redirect("task:task", filter=filter)
+
     return render(request, "task/edit_task.html", {
         'task': task,
         'tasks': tasks,
@@ -83,10 +85,8 @@ def is_done(request):
     if not request.is_ajax():
         return HttpResponseBadRequest()
     id = request.GET.get('id', None)
-    task = Task.objects.filter(user=request.user).get(pk=id)
-
+    task = get_object_or_404(Task, user=request.user, pk=id)
     done = request.GET.get('done', False)
-    print(done)
     if done == "1":
         task.done = True
     else:
@@ -103,7 +103,7 @@ def timer(request):
     if not request.is_ajax():
         return HttpResponseBadRequest()
     id = request.GET.get('id', None)
-    task = Task.objects.filter(user=request.user).get(pk=id)
+    task = get_object_or_404(Task, user=request.user, pk=id)
     timer = request.GET.get('timer', 0)
 
     task.timer = timedelta(seconds=int(timer))
@@ -119,7 +119,7 @@ def timer_value(request):
     if not request.is_ajax():
         return HttpResponseBadRequest()
     id = request.GET.get('id', None)
-    task = Task.objects.filter(user=request.user).get(pk=id)
+    task = get_object_or_404(Task, user=request.user, pk=id)
     data = {
         'timer': task.timer.total_seconds(),
     }
@@ -157,27 +157,35 @@ def pagination_ajax(request):
     return HttpResponse(json.dumps(data), content_type='application/json')
 
 
-def calculate_end(user, filter, end):
-    count = Task.objects.filter(user=user) \
-        .order_by(*filter_args(filter)).count()
-    if end > count:
-        end = count
-    return end
+@login_required
+def search(request, query):
+    if query == "":
+        query = request.GET.get('q', "")
+    sqs = SearchQuerySet().filter(author=request.user).auto_query(query)
+    sqs = sqs.load_all()
+    return render(request, "search/search.html", {
+        "results": sqs, "query": query})
 
 
-def filter_args(filter):
-    if filter == "spend":
-        return ("-timer", "name")
-    elif filter == "name":
-        return ("name", "-timer")
-    elif filter == "done":
-        return ("-created", "name")
-    else:
-        return ("-created", "name")
+@login_required
+def edit_search(request, pk, query):
+    sqs = SearchQuerySet().filter(author=request.user).auto_query(query)
+    sqs = sqs.load_all()
+    task = get_object_or_404(Task, user=request.user, pk=pk)
+    if request.method == 'POST':
+        name = request.POST.get('name', None)
+        description = request.POST.get('description', None)
+        task.name = name
+        task.description = description
+        task.save()
+        return redirect("task:search", query)
+
+    return render(request, "search/edit.html", {
+        "results": sqs, "query": query, "task": task})
 
 
-def check_filter(filter):
-    if filter == "spend" or filter == "name" or filter == "done" \
-            or filter == "creating" or filter is None:
-        return True
-    return False
+@login_required
+def remove_search(request, pk, query):
+    task = get_object_or_404(Task, user=request.user, pk=pk)
+    task.delete()
+    return redirect("task:search", query=query)

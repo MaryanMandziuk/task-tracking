@@ -11,21 +11,25 @@ urlpatterns = [
     url(r'^logout/$', auth_views.LogoutView.as_view(next_page='account:login'),
         name='logout'),
     url(r'^reset/$',
-        auth_views.PasswordResetView.as_view(template_name='account/reset.html',
-        email_template_name='account/reset_email.html',
-        success_url=reverse_lazy('account:reset_done' ),
-        form_class=EmailForm),
+        auth_views.PasswordResetView.as_view(
+            template_name='account/reset.html',
+            email_template_name='account/reset_email.html',
+            success_url=reverse_lazy('account:reset_done'),
+            form_class=EmailForm),
         name='reset'),
     url(r'^reset/done/$',
-        auth_views.PasswordResetDoneView.as_view(template_name='account/reset_done.html'),
+        auth_views.PasswordResetDoneView.as_view(
+            template_name='account/reset_done.html'),
         name='reset_done'),
     url(r'^reset/confirm/(?P<uidb64>[-\w]+)/(?P<token>[-\w]+)/$',
-        auth_views.PasswordResetConfirmView.as_view(template_name='account/reset_confirm.html',
-        form_class = PasswordForm,
-        success_url=reverse_lazy('account:reset_complete')),
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name='account/reset_confirm.html',
+            form_class=PasswordForm,
+            success_url=reverse_lazy('account:reset_complete')),
         name='reset_confirm'),
     url(r'^reset/complete/$',
-        auth_views.PasswordResetCompleteView.as_view(template_name='account/reset_complete.html'),
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name='account/reset_complete.html'),
         name='reset_complete'),
 
 ]

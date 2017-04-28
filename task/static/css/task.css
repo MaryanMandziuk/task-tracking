@@ -1,9 +1,8 @@
-
 html, body {
   font-family: 'Roboto', 'Helvetica', sans-serif;
 }
 
-.tasks-layout .mdl-layout__header {
+.tasks-layout .mdl-layout__header .mdl-layout__drawer-button {
   color: rgba(0, 0, 0, 0.54);
 }
 
@@ -63,6 +62,7 @@ html, body {
   display: flex;
   box-sizing: border-box;
   align-items: center;*/
+  margin-top: auto;
 }
 
 .tasks {
@@ -100,4 +100,34 @@ html, body {
     right: 20px;
     position: fixed;
     z-index: 3;
+}
+
+.search-field {
+    margin: auto;
+    width: 50%;
+}
+.search-input {
+    width: 60%;
+}
+
+@media (max-width: 700px) {
+    .created-finished { font-size: 10px; }
+}
+
+.about-center-button {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.align-dialog-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+.cancel-button {
+    float: left;
+}
+.save-button {
+    float: right;
 }

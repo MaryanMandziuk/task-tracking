@@ -1,6 +1,5 @@
 function timer(time, id)
 {
-    // var time = 0;
     var timer_id;
     this.tracking = false;
     this.start = function()
@@ -52,8 +51,8 @@ function generate_time(time, id)
 
 
 var map = {};
-function timing(id) {
 
+function timing(id) {
     id = $(id).parent().attr("id");
     var pos = id.lastIndexOf("-");
     id = id.slice(pos+1);

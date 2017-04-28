@@ -8,7 +8,6 @@ function pagination_ajax() {
     'offset': offset,
     'filter': get_filter(),
     },
-    // async: false,
     success: function (data) {
         if (data.length > 0) {
              for (var i = 0, total = data.length; i < total; i++) {
@@ -23,20 +22,15 @@ function pagination_ajax() {
              }
              offset += paginate_by
          }
-
-
         },
-    error: function(err) {
-        console.log("ERRR");
-    }
     });
 }
 
 
 var $window = $(window);
 function pagination() {
-    var path = window.location.pathname;
-    var pos = path.indexOf("search");
+    var path = window.location.href;
+    var pos = path.indexOf("?q=");
     if (pos == -1 && $('#main').innerHeight()+$('#main').scrollTop() >= $('#main').prop("scrollHeight")) {
         pagination_ajax();
     }
@@ -45,12 +39,16 @@ function pagination() {
 
 function get_filter() {
     var path = window.location.pathname;
-    var pos = path.lastIndexOf("/");
-    var filter = path.slice(pos+1);
-    if(filter == "") {
-        filter = "creating";
+
+    if (path.lastIndexOf("name") != -1) {
+        return "name";
+    } else if (path.lastIndexOf("done") != -1) {
+        return "done";
+    } else if (path.lastIndexOf("spend") != -1) {
+        return "spend";
+    } else {
+        return "creating";
     }
-    return filter;
 }
 
 
@@ -119,9 +117,6 @@ function generate_task(task) {
     timer_icon.textContent = "play_arrow";
 
 
-
-
-
     card_title.appendChild(card_title_text);
     card_title.appendChild(spacer);
     div_dates.appendChild(created);
@@ -163,7 +158,6 @@ function create_button_menu(task) {
 
     menu_button.appendChild(icon_for_menu_button);
 
-
     return menu_button;
 }
 
@@ -174,22 +168,22 @@ function create_menu(task) {
     menu_list.id = "menu_list-" + task.pk;
     var menu_link_edit = document.createElement('a');
     menu_link_edit.className = "link-button";
-    if(task.filter == "") {
+    // if(task.filter == "") {
         menu_link_edit.href = "edit/" + task.pk;
-    } else {
-        menu_link_edit.href = task.filter + "/edit/" + task.pk;
-    }
+    // } else {
+    //     menu_link_edit.href = task.filter + "/edit/" + task.pk;
+    // }
     var menu_edit = document.createElement('li');
     menu_edit.className = "mdl-menu__item";
     menu_edit.id = "edit" + task.pk;
     menu_edit.textContent = "Edit";
     var menu_link_remove = document.createElement('a');
     menu_link_remove.className = "link-button";
-    if(task.filter == "") {
+    // if(task.filter == "") {
         menu_link_remove.href ="remove/" + task.pk;
-    } else {
-        menu_link_remove.href = task.filter + "/remove/" + task.pk;
-    }
+    // } else {
+    //     menu_link_remove.href = task.filter + "/remove/" + task.pk;
+    // }
     var menu_remove = document.createElement('li');
     menu_remove.className = "mdl-menu__item";
     menu_remove.textContent = "Remove";
@@ -203,7 +197,5 @@ function create_menu(task) {
 }
 
 $(document).ready(function() {
-        // console.log($('.mdl-grid').height());
         $('.mdl-grid').height($('.mdl-grid').height() * 1.25);
-        // console.log($('.mdl-grid').height());
 })

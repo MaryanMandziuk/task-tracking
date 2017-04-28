@@ -1,6 +1,5 @@
 function is_done(it) {
     var done = $(it).is(":checked") ? "1": "0";
-
     var id =  $(it).attr("id");
     var pos = id.lastIndexOf("-");
     id = id.slice(pos+1);

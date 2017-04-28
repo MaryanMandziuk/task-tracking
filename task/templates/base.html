@@ -34,19 +34,17 @@
         <div class="mdl-layout__header-row">
           <span class="mdl-layout-title">Tasks</span>
 
-          <!-- <div class="mdl-layout-spacer"></div> -->
 
 
-          <div style=" margin: auto;">
-              <form method="get" action="{% url 'task:haystack_search' %}">
-                  <div class="mdl-textfield mdl-js-textfield">
 
-
+          <div class="search-field">
+              <form  method="get" action="{% url 'task:search' %}">
+                  <div  class="search-input mdl-textfield mdl-js-textfield">
                      <input class="mdl-textfield__input" type="search" id="id_q" name="q">
                      <label class="mdl-textfield__label" for="sample1">search...</label>
                    </div>
 
-                  <button type="submit" class="mdl-button mdl-js-button mdl-button--icon">
+                  <button  type="submit" class="mdl-button mdl-js-button mdl-button--icon">
                     <i class="material-icons">search</i>
                   </button>
               </form>
@@ -56,7 +54,7 @@
             <i class="material-icons">more_vert</i>
           </button>
           <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="hdrbtn">
-            <li class="mdl-menu__item">About</li>
+            <li id="show-about" class="mdl-menu__item">About</li>
             <a class="link-button" href="{% url 'account:logout' %}"><li class="mdl-menu__item">Log Out</li></a>
           </ul>
         </div>
@@ -95,12 +93,9 @@
         </div>
 
         <div class="mdl-grid">
-        {% if query %}
-        {% block search_content %}
-        {% endblock %}
-        {% else %}
-        {% include 'tasks.html' %}
-        {% endif %}
+
+            {% block content %}
+            {% endblock %}
 
 
         </div>
@@ -109,13 +104,33 @@
 
       </main>
     </div>
-
-
     {% block dialog %}
     {% endblock %}
 
-    {% include 'add_button.html' %}
-
+    <dialog id="about" class="mdl-dialog">
+       <h4 class="mdl-dialog__title">Task Tracking</h4>
+       <div class="mdl-dialog__content">
+         <p class="dl-color-text--grey-600">
+           contact: <a href="mailto:task.tracking.stand@gmail.com">task.tracking.stand@gmail.com</a>
+         </p>
+       </div>
+       <div class="about-center-button" class="mdl-dialog__actions">
+         <button type="button" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent close">Ok</button>
+       </div>
+     </dialog>
+     <script>
+       var dialog_about = document.querySelector('#about');
+       var showDialogAboutButton = document.querySelector('#show-about');
+       if (! dialog_about.showModal) {
+         dialogPolyfill.registerDialog(dialog_about);
+       }
+       showDialogAboutButton.addEventListener('click', function() {
+         dialog_about.showModal();
+       });
+       dialog_about.querySelector('.close').addEventListener('click', function() {
+         dialog_about.close();
+       });
+     </script>
 
     <script src="{% static 'js/is_done.js' %}"></script>
     <script src="{% static 'js/pagination.js' %}"></script>

@@ -6,14 +6,14 @@
         <div>
             <div class="mdl-color-text--blue-grey-50 created-finished">created: {{ task.created }}</div>
             {% if task.done %}
-            <div class="mdl-color-text--blue-grey-50 created-finished">finished: {{ task.finished }}</div>
+            <div  class="mdl-color-text--blue-grey-50 created-finished">finished: {{ task.finished }}</div>
             {% endif %}
         </div>
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="{{ task.pk }}">
           <i class="material-icons">more_vert</i>
         </button>
         <ul class="mdl-menu mdl-js-menu mdl-js-ripple-effect mdl-menu--bottom-right" for="{{ task.pk }}">
-          <a href="{% url 'task:edit_task' pk=task.pk filter=filter  %}" class="link-button">
+          <a href="{% url 'task:edit_task' pk=task.pk filter=filter %}" class="link-button">
               <li class="mdl-menu__item" id="edit{{ task.pk }}">Edit</li>
           </a>
           <a href="{% url 'task:remove_task' pk=task.pk filter=filter %}" class="link-button">
@@ -24,7 +24,7 @@
     <div class="mdl-card__supporting-text">
         {{ task.description }}
     </div>
-    <div style="margin-top: auto;" class="mdl-card__actions mdl-card--border">
+    <div class="mdl-card__actions mdl-card--border">
         <div class="card-action-container">
             <div>
                 <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="checkbox-{{ task.pk }}">
