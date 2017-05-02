@@ -7,7 +7,7 @@ from .models import Task
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from haystack.query import SearchQuerySet
-from .utils import calculate_end, filter_args, check_filter
+from .util import correct_boundary, filter_args, check_filter
 import json
 
 ITEM_BY_PAGINATION = 9
@@ -60,6 +60,8 @@ def remove_task(request, pk, filter):
 @login_required
 def edit_task(request, pk, filter):
     task = get_object_or_404(Task, user=request.user, pk=pk)
+    if not check_filter(filter):
+        raise Http404
     if filter == "done":
         tasks = Task.objects.filter(user=request.user, done=True)\
             .order_by(*filter_args(filter))[:ITEM_BY_PAGINATION]
@@ -132,13 +134,18 @@ def pagination_ajax(request):
         return HttpResponseBadRequest()
     offset = request.GET.get('offset', 0)
     filter = request.GET.get('filter', None)
+    if not check_filter(filter):
+        raise Http404
     offset = int(offset)
     end = offset + ITEM_BY_PAGINATION
     data = []
     if end <= Task.objects.filter(user=request.user).count() \
             + ITEM_BY_PAGINATION:
         tasks = None
-        end = calculate_end(request.user, filter, end)
+        end = correct_boundary(request.user, filter, end)
+        if filter == "done":
+            tasks = Task.objects.filter(user=request.user, done=True)\
+                .order_by(*filter_args(filter))[offset:end]
         tasks = Task.objects.filter(user=request.user)\
             .order_by(*filter_args(filter))[offset:end]
 

@@ -2,3 +2,7 @@ db.sqlite3
 geckodriver.log
 __pychache__
 *.pyc
+email.py
+local.py
+production.py
+key.py

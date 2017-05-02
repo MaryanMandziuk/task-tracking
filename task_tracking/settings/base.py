@@ -12,18 +12,18 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from django.urls import reverse_lazy
+from .key import SECRET_KEY
+from .email import *
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '6b&-a(%ab+qn)^lfzliy-yfzn%!v3%vq@_wu(ip$w04vqguuh2'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -123,15 +123,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 AUTHENTICATION_BACKENDS = ['account.emailbackend.EmailBackend']
-EMAIL_USE_TLS = True
-# DEFAULT_FROM_EMAIL = 'test@gmail.com'
-# SERVER_EMAIL = 'test@gmail.com'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_HOST_USER = 'task.tracking.stand@gmail.com'
-EMAIL_HOST_PASSWORD = 'spirit66542'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 
 LOGIN_REDIRECT_URL = reverse_lazy('task:main')
 LOGIN_URL = reverse_lazy('account:login')

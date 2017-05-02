@@ -1,7 +1,7 @@
 from .models import Task
 
 
-def calculate_end(user, filter, end):
+def correct_boundary(user, filter, end):
     count = Task.objects.filter(user=user) \
         .order_by(*filter_args(filter)).count()
     if end > count:
