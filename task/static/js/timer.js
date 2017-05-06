@@ -12,11 +12,11 @@ function timer(time, id)
                 generate_time(time, id);
             }, interval);
             $('#button-timer-' + id + ' button i').html('stop');
-            send_timer(time, id);
+            set_timer(time, id);
 
             window.onbeforeunload = function(event)
             {
-               send_timer(time, id);
+               set_timer(time, id);
             };
     }
 
@@ -26,11 +26,11 @@ function timer(time, id)
         if(this.id !== 'undefined') {
             $('#button-timer-' + id + ' button i').html('play_arrow');
         }
-        send_timer(time, id);
+        set_timer(time, id);
 
         window.onbeforeunload = function(event)
         {
-            send_timer(time, id);
+            set_timer(time, id);
         };
     }
 }
@@ -79,10 +79,10 @@ function stop_all() {
     }
 }
 
-function send_timer(time, id) {
+function set_timer(time, id) {
     $.ajax({
       type: 'GET',
-      url: 'timer/',
+      url: 'set_timer/',
       data: {
         'id': id,
         'timer': time,
@@ -97,7 +97,7 @@ function get_timer(id) {
     var timer = null;
     $.ajax({
       type: 'GET',
-      url: 'timer_value/',
+      url: 'get_timer/',
       async: false,
       data: {
         'id': id,

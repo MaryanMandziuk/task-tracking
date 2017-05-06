@@ -1,3 +1,4 @@
+from django.http import Http404
 from .models import Task
 
 
@@ -25,3 +26,13 @@ def check_filter(filter):
             or filter == "creating" or filter is None:
         return True
     return False
+
+
+# def check_filter(filter):
+#     if filter == "spend" or filter == "name" or filter == "done" \
+#             or filter == "creating":
+#         return filter
+#     elif filter is None:
+#         return "creating"
+#     else:
+#         raise Http404

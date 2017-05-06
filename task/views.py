@@ -22,6 +22,7 @@ class TaskView(generic.ListView):
         filter = self.kwargs['filter']
         if not check_filter(filter):
             raise Http404
+        filter = check_filter(filter)
         if filter == "done":
             return Task.objects.filter(user=self.request.user, done=True)\
                 .order_by(*filter_args(filter))[:ITEM_BY_PAGINATION]
@@ -43,10 +44,15 @@ class TaskView(generic.ListView):
 
 @login_required
 def create_task(request, filter):
-    name = request.POST.get('name', 'No name')
-    description = request.POST.get('description', None)
+    try:
+        name = request.POST['name']
+        description = request.POST['description']
+    except KeyError:
+        raise Http404
     task = Task(user=request.user, name=name, description=description)
     task.save()
+    if filter is None:
+        return redirect("task:task")
     return redirect("task:task", filter=filter)
 
 
@@ -54,6 +60,8 @@ def create_task(request, filter):
 def remove_task(request, pk, filter):
     task = get_object_or_404(Task, user=request.user, pk=pk)
     task.delete()
+    if filter is None:
+        return redirect("task:task")
     return redirect("task:task", filter=filter)
 
 
@@ -65,11 +73,14 @@ def edit_task(request, pk, filter):
     if filter == "done":
         tasks = Task.objects.filter(user=request.user, done=True)\
             .order_by(*filter_args(filter))[:ITEM_BY_PAGINATION]
-    tasks = Task.objects.filter(user=request.user) \
-        .order_by(*filter_args(filter))[:ITEM_BY_PAGINATION]
+    else:
+        tasks = Task.objects.filter(user=request.user) \
+            .order_by(*filter_args(filter))[:ITEM_BY_PAGINATION]
+    if filter is None:
+        filter = "creating"
     if request.method == 'POST':
-        name = request.POST.get('name', None)
-        description = request.POST.get('description', None)
+        name = request.POST.get('name', "")
+        description = request.POST.get('description', "")
         task.name = name
         task.description = description
         task.save()
@@ -101,7 +112,7 @@ def is_done(request):
 
 
 @login_required
-def timer(request):
+def set_timer(request):
     if not request.is_ajax():
         return HttpResponseBadRequest()
     id = request.GET.get('id', None)
@@ -117,7 +128,7 @@ def timer(request):
 
 
 @login_required
-def timer_value(request):
+def get_timer(request):
     if not request.is_ajax():
         return HttpResponseBadRequest()
     id = request.GET.get('id', None)
@@ -175,7 +186,7 @@ def search(request, query):
 
 
 @login_required
-def edit_search(request, pk, query):
+def edit_on_search_page(request, pk, query):
     sqs = SearchQuerySet().filter(author=request.user).auto_query(query)
     sqs = sqs.load_all()
     task = get_object_or_404(Task, user=request.user, pk=pk)
@@ -192,7 +203,7 @@ def edit_search(request, pk, query):
 
 
 @login_required
-def remove_search(request, pk, query):
+def remove_on_search_page(request, pk, query):
     task = get_object_or_404(Task, user=request.user, pk=pk)
     task.delete()
     return redirect("task:search", query=query)
