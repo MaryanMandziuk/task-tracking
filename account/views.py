@@ -6,24 +6,27 @@ from django.contrib.auth.models import User
 
 
 def register(request):
-    print("REGISTER")
+    form = UserRegistrationForm()
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             new_user = form.save(commit=False)
             email = form.cleaned_data['email']
             if User.objects.filter(email=email).exists():
-                return render(request, 'account/register_faild.html', {
+                return render(request, 'account/register_failed.html', {
                               'email': email})
             new_user.username = form.cleaned_data['email']
-            new_user.set_password(form.cleaned_data['password1'])
+            new_user.set_password(form.cleaned_data['password2'])
             new_user.save()
             return render(request, 'account/register_done.html', {
                                     'new_user': new_user})
+        else:
+            inccorect_input = "Incorrect inputs data, please put them \
+                                carefully"
+            return render(request, 'account/register.html', {'form': form,
+                          "inccorect_input": inccorect_input})
     else:
-        print("FFFFF")
         form = UserRegistrationForm()
-
     return render(request, 'account/register.html', {'form': form})
 
 
