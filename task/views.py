@@ -22,7 +22,6 @@ class TaskView(generic.ListView):
         filter = self.kwargs['filter']
         if not check_filter(filter):
             raise Http404
-        filter = check_filter(filter)
         if filter == "done":
             return Task.objects.filter(user=self.request.user, done=True)\
                 .order_by(*filter_args(filter))[:ITEM_BY_PAGINATION]
@@ -166,8 +165,8 @@ def pagination_ajax(request):
                 'name': task.name,
                 'description': task.description,
                 'timer': task.timer.total_seconds(),
-                'created': str(task.created),
-                'finished': str(task.finished),
+                'created': str(task.created.strftime('%b %d, %Y')),
+                'finished': str(task.finished.strftime('%b %d, %Y')),
                 'done': str(task.done),
                 'filter': filter
             })

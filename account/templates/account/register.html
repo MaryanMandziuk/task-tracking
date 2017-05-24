@@ -2,7 +2,7 @@
 
 {% block content %}
     {% if inccorect_input %}
-    <p style="color: red;">{{ inccorect_input }}</p>
+    <span style="color: red;">{{ inccorect_input }}</span>
     {% endif %}
     <form action="." method="post">
         {% csrf_token %}

@@ -22,7 +22,7 @@ def register(request):
                                     'new_user': new_user})
         else:
             inccorect_input = "Incorrect inputs data, please put them \
-                                carefully"
+                                carefully!"
             return render(request, 'account/register.html', {'form': form,
                           "inccorect_input": inccorect_input})
     else:
@@ -33,6 +33,7 @@ def register(request):
 def user_login(request):
     if request.method == 'POST':
         form = MaterialLoginForm(request.POST)
+
         if form.is_valid():
             cd = form.cleaned_data
             user = authenticate(username=cd['email'],
@@ -41,7 +42,7 @@ def user_login(request):
                 login(request, user)
                 return redirect('task:task')
             else:
-                error = 'Invalid login'
+                error = 'Wrong email or password. Please try again!'
                 return render(request,
                               'account/login.html',
                               {'form': form, 'error': error})
